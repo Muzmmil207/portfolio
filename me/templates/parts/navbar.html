@@ -1,0 +1,40 @@
+<!-- ======= Navbar ======= -->
+<div class="collapse navbar-collapse custom-navmenu" id="main-navbar">
+  <div class="container py-2 py-md-5">
+    <div class="row align-items-start">
+      <div class="col-md-2">
+        <ul class="custom-menu">
+          <li class="active"><a href="{% url 'my_portfolio' %}">Home</a></li>
+          <li><a href="{% url 'about' %}">About Me</a></li>
+          <li><a href="{% url 'services' %}">Services</a></li>
+          <!-- <li><a href="works.html">Works</a></li> -->
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-md-6 d-none d-md-block  mr-auto">
+        <div class="tweet d-flex">
+          <!-- <span class="bi bi-twitter text-white mt-2 mr-3"></span> -->
+          <div>
+            <p style="font-size: 30px;color: white;"><em> <br> Modather's Portfolio<a href="#"></a></em></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 d-none d-md-block">
+        <h3>Hire Me</h3>
+        <p>Let me help you turn your ideas into great application that works on Android and iOS,
+          and even on the Web and Desktop if you want with the great tool Flutter💙 <br> <a
+            href="#">Modather0Ali@gmail.com</a></p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<nav class="navbar navbar-light custom-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'my_portfolio' %}">Modather's Portfolio.</a>
+    <a href="#" class="burger" data-bs-toggle="collapse" data-bs-target="#main-navbar">
+      <span></span>
+    </a>
+  </div>
+</nav>

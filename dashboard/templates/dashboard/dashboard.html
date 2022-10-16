@@ -1,0 +1,164 @@
+{% extends 'dashboard/index.html' %}
+{% load static %}
+{% load count %}
+{% block content %}
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <h1 class="h3 mb-3"><strong>Analytics</strong> Dashboard</h1>
+
+        <div class="row">
+            <div class="col-xl-6 col-xxl-5 d-flex">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col mt-0">
+                                        <h5 class="card-title">Visitors</h5>
+                                    </div>
+                                </div>
+                                <h1 class="mt-1 mb-3">{{visitors|visitors}}</h1>
+                                <div class="mb-0">
+                                    <span class="text-success">
+                                        {{visitors|latest}}
+                                        <i class="mdi mdi-arrow-bottom-right"></i>
+                                    </span>
+                                    <span class="text-muted">Since last week</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col mt-0">
+                                        <h5 class="card-title">Projects</h5>
+                                    </div>
+                                </div>
+                                <h1 class="mt-1 mb-3"><a href="{% url 'man_pro' %}">Projects</a>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-12 col-xxl-6 d-flex order-3 order-xxl-2">
+                <div class="card flex-fill">
+                    <div class="card-header">
+
+                        <h5 class="card-title mb-0">Latest Projects</h5>
+                    </div>
+                    <table class="table table-hover my-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th class="d-none d-xl-table-cell">Email</th>
+                                <th class="d-none d-xl-table-cell">Start Date</th>
+                                <th>subject</th>
+                                <th class="d-none d-md-table-cell">From</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for message in messages %}
+                            <tr>
+                                <td>{{message.name}}</td>
+                                <td class="d-none d-xl-table-cell">
+                                    <a href="mailto:{{message.email}}">{{message.email}}</a>
+                                </td>
+                                <td class="d-none d-xl-table-cell">{{message.date|date:'SHORT_DATE_FORMAT'}}</td>
+                                <td class="d-none d-md-table-cell">{{message.subject}}</td>
+                                <td><span class="badge bg-success">{{message.message_location|default:"Unknown"}}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="card flex-fill w-100">
+                <div class="card-header">
+
+                    <h5 class="card-title mb-0">Real-Time</h5>
+                </div>
+                <div class="card-body px-4">
+                    <div id="world_map" style="height:350px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<!-- map -->
+<script>
+
+    const response = 'http://127.0.0.1:8000/api/'
+
+    function getApi() {
+        return fetch('http://127.0.0.1:8000/api/', {
+            method: "GET",
+            headers: {
+                'content-type': 'application/json',
+                'Accept': 'application/json',
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                let arr = [{ coords: [31.230391, 121.473701], name: "Shanghai" }]
+                let goeloaction = {
+                    coords: [],
+                    name: "",
+                }
+                let list = data
+                for (let i = 0; i < list.length; i++) {
+                    let location = list[i]
+                    goeloaction.coords.push(parseFloat(location.latitude), parseFloat(location.longitude))
+                    goeloaction.name = location.region
+                    arr.push(goeloaction)
+                    goeloaction = {
+                        coords: [],
+                        name: "",
+                    }
+                }
+                return arr
+            })
+    }
+    let data = getApi().then(response => {response})
+    console.log(data)
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var markers = data;
+        var map = new jsVectorMap({
+            map: "world",
+            selector: "#world_map",
+            zoomButtons: true,
+            markers: markers,
+            markerStyle: {
+                initial: {
+                    r: 9,
+                    strokeWidth: 7,
+                    stokeOpacity: .4,
+                    fill: window.theme.primary
+                },
+                hover: {
+                    fill: window.theme.primary,
+                    stroke: window.theme.primary
+                }
+            },
+            zoomOnScroll: false
+        });
+        window.addEventListener("resize", () => {
+            map.updateSize();
+        });
+    });
+
+
+</script>
+
+{% endblock %}
