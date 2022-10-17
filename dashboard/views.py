@@ -4,11 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.views.decorators.http import require_http_methods
-from .models import GuestLocation, MyProject
-from .forms import AboutProjectsForm
+from .models import GuestLocation, MyProject, ProjectImage, ProjectTool
+from .forms import MyProjectForm
 from me.models import Message
-from me.forms import MessageForm
 from .serializer import GuestLocationSerializer
 from .decorators import admin_only
 from rest_framework.response import Response
@@ -18,10 +16,9 @@ from rest_framework.permissions import IsAuthenticated
 
 @login_required(login_url='login')
 def dashboard(request):
-    # print(request.headers)
     visitors = GuestLocation.objects.all()
-    print(len(GuestLocation.objects.all()))
     messages = Message.objects.all()
+
     context = {'messages': messages, 'visitors': visitors, }
     return render(request, 'dashboard/dashboard.html', context)
 
@@ -29,44 +26,60 @@ def dashboard(request):
 @login_required(login_url='login')
 def manage_projects(request):
     projects = MyProject.objects.all()
-    form = AboutProjectsForm()
-    if request.method == 'POST':
-        form = AboutProjectsForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('man_pro')
-    context = {'form': form, 'projects': projects}
 
+    context = {'projects': projects}
     return render(request, 'dashboard/manage-projects.html', context)
 
 
+@login_required(login_url='login')
 @admin_only
 def add_project(request):
-    page_name = 'add'
-    form = AboutProjectsForm()
+    form = MyProjectForm()
     if request.method == 'POST':
-        form = AboutProjectsForm(request.POST)
+        form = MyProjectForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('man_pro')
-    context = {'form': form, 'page_name': page_name}
+
+    context = {'form': form}
     return render(request, 'dashboard/add-project.html', context)
 
 
+@login_required(login_url='login')
+@admin_only
+def add_images_and_tools(request):
+    if request.method == 'POST':
+        if 'tool' in request.POST:
+            ProjectTool.objects.create(
+                name=request.POST.get('tool')
+            )
+        elif 'image' in request.POST:
+            ProjectImage.objects.create(
+                name=request.POST.get('name'),
+                image=request.POST.get('image'),
+                order=request.POST.get('order'),
+            )
+        return redirect('addImgTool')
+
+    return render(request, 'dashboard/add-images&tools.html')
+
+
+@login_required(login_url='login')
 @admin_only
 def update_project(request, pk):
-    page_name = 'update'
     project = MyProject.objects.get(id=pk)
-    form = AboutProjectsForm(instance=project)
+    form = MyProjectForm(instance=project)
     if request.method == 'POST':
-        form = AboutProjectsForm(request.POST, instance=project)
+        form = MyProjectForm(request.POST, instance=project)
         if form.is_valid():
             form.save()
             return redirect('man_pro')
-    context = {'form': form, 'project': project, 'page_name': page_name}
+
+    context = {'form': form, 'project': project}
     return render(request, 'dashboard/update-project.html', context)
 
 
+@login_required(login_url='login')
 @admin_only
 def delete_project(request, pk):
     try:
@@ -78,7 +91,6 @@ def delete_project(request, pk):
 
 
 def login_user(request):
-
     if request.user.is_authenticated:
         return redirect('dashboard')
 

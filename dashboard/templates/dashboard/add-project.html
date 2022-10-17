@@ -1,7 +1,6 @@
 {% extends 'dashboard/index.html' %}
 {% load static %}
 {% block content %}
-{% load crispy_forms_tags %}
 
 <main class="content">
     <div class="container-fluid p-0">
@@ -13,10 +12,11 @@
                         <div class="card-body">
                             {{form}}
                             <br>
-                            <button class="btn btn-primary">Submit</button>
+                            <button class="btn btn-success">Submit</button>
 
                         </div>
                     </form>
+                    <a href="{% url 'addImgTool' %}" class="btn btn-primary">add Imgs | Tools</a>
                 </div>
             </div>
         </div>

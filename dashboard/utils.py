@@ -12,7 +12,7 @@ def get_location():
 
     ip = get_ip()
     location_data = requests.get(
-        f'http://ipinfo.io/{ip}?token={settings.IP_TOKEN}').json()
+        f'http://ipinfo.io/{ip}?token={settings.API_TOKEN}').json()
 
     GuestLocation.objects.get_or_create(
         ip_address=location_data['ip'],

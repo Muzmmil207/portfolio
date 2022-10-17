@@ -20,51 +20,50 @@ class GuestLocation(models.Model):
 
 class MyProject(models.Model):
     project_title = models.CharField(max_length=99)
-    images = models.FileField(null=True, blank=True,
-                              upload_to='img/', default=default_img)
     description = models.TextField(blank=True, null=True)
     project_url = models.URLField()
     src_url = models.URLField(blank=True, null=True)
     date = models.DateField(auto_now_add=True)
+    image = models.ManyToManyField(
+        'ProjectImage',
+        related_name='images'
+    )
+    tool = models.ManyToManyField(
+        'ProjectTool',
+        related_name='tools'
+    )
 
     @property
     def get_clean_url(self):
-        url = self.name
+        url = self.project_title
         return '-'.join(i for i in url.split())
 
     @property
     def image_url(self):
         try:
-            url = self.image.url
+            image = self.image.first()
+            url = image.image.url
         except:
             url = default_img
         return url
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.project_title}'
 
 
-class MyProject(models.Model):
-    project_title = models.CharField(max_length=99)
-    images = models.F(null=True, blank=True,
-                      upload_to='img/', default=default_img)
-    description = models.TextField(blank=True, null=True)
-    project_url = models.URLField()
-    src_url = models.URLField(blank=True, null=True)
-    date = models.DateField(auto_now_add=True)
+class ProjectImage(models.Model):
+    image = models.ImageField(upload_to='img/')
+    order = models.IntegerField(null=True, blank=True)
 
-    @property
-    def get_clean_url(self):
-        url = self.name
-        return '-'.join(i for i in url.split())
+    class Meta:
+        ordering = ['order']
 
-    @property
-    def image_url(self):
-        try:
-            url = self.image.url
-        except:
-            url = default_img
-        return url
+    def __str__(self):
+        return f' {self.image}'
+
+
+class ProjectTool(models.Model):
+    name = models.CharField(max_length=99)
 
     def __str__(self):
         return f'{self.name}'

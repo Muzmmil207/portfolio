@@ -7,16 +7,15 @@ from dashboard.utils import get_location
 
 
 def my_portfolio(request):
-
     if 'ip_address' not in request.session and not request.user.is_superuser:
         guest_location_data = get_location()
         request.session['ip_address'] = guest_location_data
-        # print('ip_address has been added to the session')
 
     request.session['has_message'] = False
-    articles = MyProject.objects.all()
 
-    context = {'form': 'form', 'articles': articles}
+    projects = MyProject.objects.all()
+
+    context = {'form': 'form', 'projects': projects}
     return render(request, 'me/index.html', context)
 
 
@@ -51,5 +50,9 @@ def services(request):
     return render(request, 'me/services.html')
 
 
-def single_project(request):
-    return render(request, 'me/single-project.html')
+def single_project(request, title):
+    title = title.replace('-', ' ')
+    project = MyProject.objects.get(project_title=title)
+
+    context = {'project': project}
+    return render(request, 'me/single-project.html', context)

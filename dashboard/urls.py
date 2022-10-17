@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', views.logout_user, name="logout"),
     # CRUD
     path('add-project/', views.add_project, name="add"),
+    path('add-images&tools/', views.add_images_and_tools, name="addImgTool"),
     path('update-project/<str:pk>', views.update_project, name="update"),
     path('delete-project/<str:pk>', views.delete_project, name="dl"),
 ]

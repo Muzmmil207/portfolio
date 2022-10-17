@@ -1,0 +1,46 @@
+{% extends 'dashboard/index.html' %}
+{% load static %}
+{% block content %}
+
+<main class="content">
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="card">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Add A New Tool</label>
+                                <input type="text" name="tool" class="form-control" placeholder="tool input" >
+                            </div>
+                            <br>
+                            <button class="btn btn-success">Add</button>
+                        </div>
+                    </form>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Add A New image:</label>
+                                <input type="file" name="image" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Add Image Name:</label>
+                                <input type="text" name="name" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Determine The Image Order:</label>
+                                <input type="number" name="order" class="form-control">
+                            </div>
+                            <br>
+                            <button class="btn btn-success">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -30,5 +30,5 @@ class MessageForm(forms.ModelForm):
             subject=subject,
             message=msg,
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=['muzmmila210@gamil.com']
+            recipient_list=[settings.RECIPIENT_ADDRESS]
         )

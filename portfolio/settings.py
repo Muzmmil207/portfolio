@@ -39,12 +39,8 @@ INSTALLED_APPS = [
     'me.apps.MeConfig',
     'dashboard.apps.DashboardConfig',
 
-    'crispy_forms',
     'ckeditor',
     'rest_framework',
-    # 'django_filters',
-    # 'ckeditor_uploader',
-    # 'storages',
 ]
 
 MIDDLEWARE = [
@@ -81,16 +77,6 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': env("DB_NAME"),
-#         'USER': env("DB_USER"),
-#         'PASSWORD': env("DB_PASSWORD"),
-#         'HOST': env("DB_HOST"),
-#         'PORT': env("DB_PORT"),
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -142,15 +128,8 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# ckeditor
-CKEDITOR_CONFIGS = {
-    'default': {
-        'height': '100%',
-        'width': '100%',
-    },
-}
-
-IP_TOKEN = 'a47ae02b3e361d'
+# get your api from http://ipinfo.io/
+API_TOKEN = env('API_TOKEN')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -158,8 +137,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Emails
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+RECIPIENT_ADDRESS= env('RECIPIENT_ADDRESS')
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'mly88207@gmail.com'
-EMAIL_HOST_PASSWORD = 'mwnieujlittzbzlz'
