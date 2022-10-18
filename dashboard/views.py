@@ -4,14 +4,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.exceptions import  ObjectDoesNotExist
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
 from .models import GuestLocation, MyProject, ProjectImage, ProjectTool
 from .forms import MyProjectForm
 from me.models import Message
 from .serializer import GuestLocationSerializer
 from .decorators import admin_only
-from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
 
 
 @login_required(login_url='login')
@@ -86,7 +88,7 @@ def delete_project(request, pk):
         project = MyProject.objects.get(id=pk)
         project.delete()
         return redirect('man_pro')
-    except:
+    except ObjectDoesNotExist:
         return HttpResponse('Page not found (404)')
 
 

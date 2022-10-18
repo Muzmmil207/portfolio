@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from .models import Message
+
 from .forms import MessageForm
 from dashboard.models import GuestLocation, MyProject
 from dashboard.utils import get_location
