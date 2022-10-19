@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.core.exceptions import  ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -57,8 +57,7 @@ def add_images_and_tools(request):
             )
         elif 'image' in request.POST:
             ProjectImage.objects.create(
-                name=request.POST.get('name'),
-                image=request.POST.get('image'),
+                image=request.FILES.get('image'),
                 order=request.POST.get('order'),
             )
         return redirect('addImgTool')
