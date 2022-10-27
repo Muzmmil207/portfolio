@@ -1,14 +1,14 @@
-from django.shortcuts import render, redirect
-
-from .forms import MessageForm
 from dashboard.models import GuestLocation, MyProject
 from dashboard.utils import get_location
+from django.shortcuts import redirect, render
+
+from .forms import MessageForm
 
 
 def my_portfolio(request):
-    if 'ip_address' not in request.session and not request.user.is_superuser:
-        guest_location_data = get_location()
-        request.session['ip_address'] = guest_location_data
+    # if 'ip_address' not in request.session and not request.user.is_superuser:
+    #     guest_location_data = get_location()
+    #     request.session['ip_address'] = guest_location_data
 
     request.session['has_message'] = False
 

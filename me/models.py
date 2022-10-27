@@ -1,9 +1,9 @@
-from django.db import models
 from dashboard.models import GuestLocation
+from django.db import models
 
 
 class Message(models.Model):
-    message_location = models.ForeignKey(
+    message_from = models.ForeignKey(
         GuestLocation, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=30)
     email = models.EmailField()
@@ -12,4 +12,4 @@ class Message(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.name}'
+        return self.name

@@ -40,7 +40,7 @@
 					</div>
 					<div class="card-body">
 						<p class="card-text">{{project.article|safe|slice:':15'}}... </p>
-						<a href="{% url 'update' project.id %}" class="card-link">Update</a>
+						<a href="{% url 'update' project.slug %}" class="card-link">Update</a>
 						<a href="{% url 'dl' project.id %}" class="card-link" method="POST">delete</a>
 					</div>
 				</div>

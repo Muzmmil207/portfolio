@@ -1,26 +1,42 @@
 from django import forms
+
 from .models import MyProject, ProjectImage, ProjectTool
 
 
 class MyProjectForm(forms.ModelForm):
+    title = forms.CharField(label='Enter Title', max_length=255, help_text='Required')
+    description = forms.Textarea()
+    project_url = forms.CharField(label='Project Url', max_length=50, help_text='Required')
+    src_url = forms.CharField(label='Source Code Url', max_length=50)
+    
     class Meta:
         model = MyProject
-        fields = ('project_title',
-                  'description', 'project_url', 'src_url', 'image', 'tool')
+        fields = ('title', 'description', 'project_url', 'src_url', 'tool')
 
-        widgets = {
-            'project_title': forms.TextInput(attrs={'class': 'form-control'}),
-            # 'image': forms.SelectMultiple(attrs={'class': 'form-control', }),
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'project_url': forms.TextInput(attrs={'class': 'form-control'}),
-            'src_url': forms.TextInput(attrs={'class': 'form-control'}),
-        }
-    image = forms.ModelMultipleChoiceField(
-        queryset=ProjectImage.objects.all(),
-        widget=forms.CheckboxSelectMultiple
-    )
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update(
+            {'class': 'form-control mb-3', 'placeholder': 'Title'}
+        )
+        self.fields['description'].widget.attrs.update(
+            {'class': 'form-control mb-3', 'placeholder': 'Description'}
+        )
+        self.fields['project_url'].widget.attrs.update(
+            {'class': 'form-control mb-3', 'placeholder': 'Enter Url'}
+        )
+        self.fields['src_url'].widget.attrs.update(
+            {'class': 'form-control mb-3', 'placeholder': 'Enter Url'}
+        )
+        self.fields['src_url'].required = False
     tool = forms.ModelMultipleChoiceField(
+        label='tools',
         queryset=ProjectTool.objects.all(),
         widget=forms.CheckboxSelectMultiple
     )
+
+class ProjectImageForm(forms.ModelForm):
+    
+    class Meta:
+        model = ProjectImage
+        fields = "__all__"
+

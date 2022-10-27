@@ -1,19 +1,19 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout, login, authenticate
-from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.response import Response
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
+from me.models import Message
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-from .models import GuestLocation, MyProject, ProjectImage, ProjectTool
-from .forms import MyProjectForm
-from me.models import Message
-from .serializer import GuestLocationSerializer
 from .decorators import admin_only
+from .forms import MyProjectForm, ProjectImageForm
+from .models import GuestLocation, MyProject, ProjectImage, ProjectTool
+from .serializer import GuestLocationSerializer
 
 
 @login_required(login_url='login')
@@ -38,9 +38,12 @@ def manage_projects(request):
 def add_project(request):
     form = MyProjectForm()
     if request.method == 'POST':
+        print(request.POST)
         form = MyProjectForm(request.POST)
         if form.is_valid():
-            form.save()
+            data = form.save(commit=False)
+            data.slug = form.cleaned_data['title']
+            data.save()
             return redirect('man_pro')
 
     context = {'form': form}
@@ -60,6 +63,7 @@ def add_images_and_tools(request):
                 image=request.FILES.get('image'),
                 order=request.POST.get('order'),
             )
+            print(request.FILES)
         return redirect('addImgTool')
 
     return render(request, 'dashboard/add-images&tools.html')
@@ -67,8 +71,8 @@ def add_images_and_tools(request):
 
 @login_required(login_url='login')
 @admin_only
-def update_project(request, pk):
-    project = MyProject.objects.get(id=pk)
+def update_project(request, slug):
+    project = MyProject.objects.get(slug=slug)
     form = MyProjectForm(instance=project)
     if request.method == 'POST':
         form = MyProjectForm(request.POST, instance=project)

@@ -1,9 +1,4 @@
-from email.policy import default
 from django.db import models
-from ckeditor.fields import RichTextField
-
-# Create your models here.
-default_img = 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80'
 
 
 class GuestLocation(models.Model):
@@ -19,24 +14,22 @@ class GuestLocation(models.Model):
 
 
 class MyProject(models.Model):
-    project_title = models.CharField(max_length=99)
-    description = models.TextField(blank=True, null=True)
-    project_url = models.URLField()
-    src_url = models.URLField(blank=True, null=True)
-    date = models.DateField(auto_now_add=True)
-    image = models.ManyToManyField(
-        'ProjectImage',
-        related_name='images'
+    title = models.CharField(
+        verbose_name="title",
+        help_text="Required",
+        max_length=255,
+        unique=True
     )
+    description = models.TextField(verbose_name="description", help_text="Not Required", blank=True)
+    slug = models.SlugField(max_length=125)
+    project_url = models.URLField(help_text="Required")
+    src_url = models.URLField(blank=True, null=True)
     tool = models.ManyToManyField(
         'ProjectTool',
         related_name='tools'
     )
-
-    @property
-    def get_clean_url(self):
-        url = self.project_title
-        return '-'.join(i for i in url.split())
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     @property
     def image_url(self):
@@ -44,26 +37,29 @@ class MyProject(models.Model):
             image = self.image.first()
             url = image.image.url
         except:
-            url = default_img
+            url = 'default_img'
         return url
 
     def __str__(self):
-        return f'{self.project_title}'
+        return self.title
 
 
 class ProjectImage(models.Model):
-    image = models.ImageField(upload_to='img/')
-    order = models.IntegerField(null=True, blank=True)
-
-    class Meta:
-        ordering = ['order']
-
-    def __str__(self):
-        return f' {self.image}'
+    """
+    The Project Image table.
+    """
+    product = models.ForeignKey(MyProject, on_delete=models.CASCADE, related_name="product_image")
+    image = models.ImageField(
+        verbose_name="image",
+        help_text="Upload a product image",
+        upload_to="images/",
+        default="images/default.png",
+    )
+    is_feature = models.BooleanField(default=False)
 
 
 class ProjectTool(models.Model):
-    name = models.CharField(max_length=99)
+    tool = models.CharField(max_length=99)
 
     def __str__(self):
-        return f'{self.name}'
+        return self.tool
