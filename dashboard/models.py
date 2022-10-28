@@ -32,12 +32,12 @@ class MyProject(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     @property
-    def image_url(self):
+    def first_image_url(self):
         try:
-            image = self.image.first()
+            image = self.product_image.first()
             url = image.image.url
         except:
-            url = 'default_img'
+            url = ''
         return url
 
     def __str__(self):
@@ -48,15 +48,17 @@ class ProjectImage(models.Model):
     """
     The Project Image table.
     """
-    product = models.ForeignKey(MyProject, on_delete=models.CASCADE, related_name="product_image")
+    product = models.ForeignKey(MyProject, on_delete=models.CASCADE, related_name="project_image")
     image = models.ImageField(
         verbose_name="image",
         help_text="Upload a product image",
         upload_to="images/",
         default="images/default.png",
     )
-    is_feature = models.BooleanField(default=False)
+    order = models.IntegerField(default=0)
 
+    class Meta:
+        ordering = ['-order']
 
 class ProjectTool(models.Model):
     tool = models.CharField(max_length=99)

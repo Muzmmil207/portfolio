@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.template.defaultfilters import slugify
 from me.models import Message
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -37,36 +38,37 @@ def manage_projects(request):
 @admin_only
 def add_project(request):
     form = MyProjectForm()
+
     if request.method == 'POST':
-        print(request.POST)
-        form = MyProjectForm(request.POST)
-        if form.is_valid():
-            data = form.save(commit=False)
-            data.slug = form.cleaned_data['title']
-            data.save()
-            return redirect('man_pro')
+        '''
+        check if the request coming from tools form
+        '''
+        if request.POST.get('tools'):
+            ProjectTool.objects.create(
+                tool=request.POST.get('tools')
+            )
+        else:
+            form = MyProjectForm(request.POST)
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.slug = slugify(form.cleaned_data['title'])
+                data.save()
+                '''
+                add project images
+                '''
+                images = request.FILES.getlist('images')
+                print(images)
+                for image in images:
+                    ProjectImage.objects.create(
+                    product=data,
+                    image=image,
+                    order=images.index(image),
+                )
+
+            return redirect('add')
 
     context = {'form': form}
     return render(request, 'dashboard/add-project.html', context)
-
-
-@login_required(login_url='login')
-@admin_only
-def add_images_and_tools(request):
-    if request.method == 'POST':
-        if 'tool' in request.POST:
-            ProjectTool.objects.create(
-                name=request.POST.get('tool')
-            )
-        elif 'image' in request.POST:
-            ProjectImage.objects.create(
-                image=request.FILES.get('image'),
-                order=request.POST.get('order'),
-            )
-            print(request.FILES)
-        return redirect('addImgTool')
-
-    return render(request, 'dashboard/add-images&tools.html')
 
 
 @login_required(login_url='login')
@@ -77,7 +79,21 @@ def update_project(request, slug):
     if request.method == 'POST':
         form = MyProjectForm(request.POST, instance=project)
         if form.is_valid():
-            form.save()
+            data = form.save()
+            '''
+            add project images
+            '''
+            images = request.FILES.getlist('images')
+            print(images)
+            if images:
+                ProjectImage.objects.filter(product=data).delete()
+                for image in images:
+                    ProjectImage.objects.create(
+                        product=data,
+                        image=image,
+                        order=images.index(image),
+                    )
+
             return redirect('man_pro')
 
     context = {'form': form, 'project': project}
@@ -100,7 +116,6 @@ def login_user(request):
         return redirect('dashboard')
 
     if request.method == 'POST':
-
         username = request.POST['username']
         password = request.POST['password']
 
@@ -128,7 +143,6 @@ def logout_user(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def api_view(request):
-
     product = GuestLocation.objects.all()
     serializer = GuestLocationSerializer(product, many=True)
 

@@ -35,12 +35,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # My Apps
     'me.apps.MeConfig',
     'dashboard.apps.DashboardConfig',
 
-    'ckeditor',
     'rest_framework',
 ]
 
@@ -136,7 +134,6 @@ API_TOKEN = env('API_TOKEN')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Emails
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_PORT = env('EMAIL_PORT')

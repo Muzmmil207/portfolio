@@ -6,6 +6,6 @@ urlpatterns = [
     path('about-me/', views.about, name="about"),
     path('contact-me/', views.contact, name="contact"),
     path('my-services/', views.services, name="services"),
-    path('single-project/<str:title>/', views.single_project, name="single_project"),
+    path('single-project/<slug:slug>/', views.single_project, name="single_project"),
 
 ]

@@ -34,14 +34,14 @@
 			{% for project in projects %}
 			<div class="col-12 col-md-6">
 				<div class="card">
-					<img class="card-img-top" src="{{project.image_url}}" alt="Unsplash">
+					<img class="card-img-top" src="{{project.first_image_url}}" alt="Unsplash">
 					<div class="card-header">
-						<h5 class="card-title mb-0">{{project.name}}</h5>
+						<h5 class="card-title mb-0">{{project.title}}</h5>
 					</div>
 					<div class="card-body">
-						<p class="card-text">{{project.article|safe|slice:':15'}}... </p>
+						<p class="card-text">{{project.description|safe|slice:':15'}}... </p>
 						<a href="{% url 'update' project.slug %}" class="card-link">Update</a>
-						<a href="{% url 'dl' project.id %}" class="card-link" method="POST">delete</a>
+						<a href="{% url 'dl' project.id %}" class="card-link">delete</a>
 					</div>
 				</div>
 			</div>

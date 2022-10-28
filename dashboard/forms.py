@@ -28,11 +28,19 @@ class MyProjectForm(forms.ModelForm):
             {'class': 'form-control mb-3', 'placeholder': 'Enter Url'}
         )
         self.fields['src_url'].required = False
+
+    def unique_title(self):
+        title = self.cleaned_data['title']
+
+        if MyProject.objects.filter(title=title).exists():
+            raise forms.ValidationError('Sorry, project with this Title already exists')
+        return title
     tool = forms.ModelMultipleChoiceField(
         label='tools',
         queryset=ProjectTool.objects.all(),
         widget=forms.CheckboxSelectMultiple
     )
+
 
 class ProjectImageForm(forms.ModelForm):
     

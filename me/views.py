@@ -6,9 +6,9 @@ from .forms import MessageForm
 
 
 def my_portfolio(request):
-    # if 'ip_address' not in request.session and not request.user.is_superuser:
-    #     guest_location_data = get_location()
-    #     request.session['ip_address'] = guest_location_data
+    if 'ip_address' not in request.session and not request.user.is_superuser:
+        guest_location_data = get_location()
+        request.session['ip_address'] = guest_location_data
 
     request.session['has_message'] = False
 
@@ -23,10 +23,9 @@ def about(request):
 
 
 def contact(request):
-
     form = MessageForm()
-    if request.method == 'POST':
 
+    if request.method == 'POST':
         try:
             location = GuestLocation.objects.get(
                 ip_address=request.session['ip_address'])
@@ -49,9 +48,8 @@ def services(request):
     return render(request, 'me/services.html')
 
 
-def single_project(request, title):
-    title = title.replace('-', ' ')
-    project = MyProject.objects.get(project_title=title)
+def single_project(request, slug):
+    project = MyProject.objects.prefetch_related('project_image').get(slug=slug)
 
     context = {'project': project}
     return render(request, 'me/single-project.html', context)
