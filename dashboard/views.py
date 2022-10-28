@@ -65,7 +65,7 @@ def add_project(request):
                     order=images.index(image),
                 )
 
-            return redirect('add')
+            return redirect('man_pro')
 
     context = {'form': form}
     return render(request, 'dashboard/add-project.html', context)
