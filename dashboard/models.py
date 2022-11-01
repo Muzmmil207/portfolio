@@ -34,7 +34,7 @@ class MyProject(models.Model):
     @property
     def first_image_url(self):
         try:
-            image = self.product_image.first()
+            image = self.project_image.first()
             url = image.image.url
         except:
             url = ''
