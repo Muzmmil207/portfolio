@@ -50,6 +50,6 @@ def services(request):
 
 def single_project(request, slug):
     project = MyProject.objects.prefetch_related('project_image').get(slug=slug)
-
+    print(project.tool)
     context = {'project': project}
     return render(request, 'me/single-project.html', context)

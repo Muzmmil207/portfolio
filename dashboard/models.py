@@ -13,6 +13,12 @@ class GuestLocation(models.Model):
         return self.region
 
 
+class ProjectTool(models.Model):
+    tool = models.CharField(max_length=99)
+
+    def __str__(self):
+        return self.tool
+
 class MyProject(models.Model):
     title = models.CharField(
         verbose_name="title",
@@ -25,7 +31,7 @@ class MyProject(models.Model):
     project_url = models.URLField(help_text="Required")
     src_url = models.URLField(blank=True, null=True)
     tool = models.ManyToManyField(
-        'ProjectTool',
+        ProjectTool,
         related_name='tools'
     )
     created = models.DateTimeField(auto_now_add=True)
@@ -59,9 +65,3 @@ class ProjectImage(models.Model):
 
     class Meta:
         ordering = ['-order']
-
-class ProjectTool(models.Model):
-    tool = models.CharField(max_length=99)
-
-    def __str__(self):
-        return self.tool

@@ -8,7 +8,7 @@
     <div class="container">
       <div class="row mb-4 align-items-center">
         <div class="col-md-6" data-aos="fade-up">
-          <h2>{{project.project_title}}</h2>
+          <h2>{{project.title}}</h2>
         </div>
       </div>
     </div>
@@ -31,8 +31,8 @@
 
               <h4 class="h4 mb-3">Tools I used</h4>
               <ul class="list-unstyled list-line mb-5">
-                {% for tools in project.tool_set.all %}
-                <li>{{tools.tool}}</li>s
+                {% for tool in project.tool.all %}
+                <li>{{tool}}</li>s
                 {% endfor %}
               </ul>
 
