@@ -98,7 +98,6 @@
 <!-- map -->
 <script>
 
-    const response = 'http://127.0.0.1:8000/api/'
 
     function getApi() {
         return fetch('http://127.0.0.1:8000/api/', {
@@ -110,7 +109,7 @@
         })
             .then((response) => response.json())
             .then((data) => {
-                let arr = [{ coords: [31.230391, 121.473701], name: "Shanghai" }]
+                let arr = []
                 let goeloaction = {
                     coords: [],
                     name: "",
