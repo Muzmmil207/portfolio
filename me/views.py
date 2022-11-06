@@ -37,7 +37,7 @@ def contact(request):
             form.send()
             request.session['has_message'] = True
             data = form.save(commit=False)
-            data.message_location = location
+            data.message_from = location
             data.save()
 
         return redirect('contact')

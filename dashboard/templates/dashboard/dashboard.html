@@ -47,7 +47,7 @@
                 <div class="card flex-fill">
                     <div class="card-header">
 
-                        <h5 class="card-title mb-0">Latest Projects</h5>
+                        <h5 class="card-title mb-0">Latest Emails</h5>
                     </div>
                     <table class="table table-hover my-0">
                         <thead>
@@ -68,7 +68,7 @@
                                 </td>
                                 <td class="d-none d-xl-table-cell">{{message.date|date:'SHORT_DATE_FORMAT'}}</td>
                                 <td class="d-none d-md-table-cell">{{message.subject}}</td>
-                                <td><span class="badge bg-success">{{message.message_location|default:"Unknown"}}</span>
+                                <td><span class="badge bg-success">{{message.message_from|default:"Unknown"}}</span>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -132,7 +132,49 @@
     console.log(data)
 
     document.addEventListener("DOMContentLoaded", function () {
-        var markers = data;
+        var markers = 
+[
+    {
+        coords: [31.230391, 121.473701],
+        name: "Shanghai"
+    },
+    {
+        coords: [28.704060, 77.102493],
+        name: "Delhi"
+    },
+    {
+        coords: [6.524379, 3.379206],
+        name: "Lagos"
+    },
+    {
+        coords: [35.689487, 139.691711],
+        name: "Tokyo"
+    },
+    {
+        coords: [23.129110, 113.264381],
+        name: "Guangzhou"
+    },
+    {
+        coords: [40.7127837, -74.0059413],
+        name: "New York"
+    },
+    {
+        coords: [34.052235, -118.243683],
+        name: "Los Angeles"
+    },
+    {
+        coords: [41.878113, -87.629799],
+        name: "Chicago"
+    },
+    {
+        coords: [51.507351, -0.127758],
+        name: "London"
+    },
+    {
+        coords: [40.416775, -3.703790],
+        name: "Madrid "
+    }
+];
         var map = new jsVectorMap({
             map: "world",
             selector: "#world_map",
@@ -156,7 +198,6 @@
             map.updateSize();
         });
     });
-
 
 </script>
 
