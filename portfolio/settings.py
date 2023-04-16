@@ -79,13 +79,13 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 
-DATABASES = {
-    "default": dj_database_url.config(
+#DATABASES = {
+ #   "default": dj_database_url.config(
         # Feel free to alter this value to suit your needs.
-        default="postgresql://postgres:postgres@localhost:5433/portfolio",
-        conn_max_age=600,
-    )
-}
+ #       default="postgresql://postgres:postgres@localhost:5433/portfolio",
+#        conn_max_age=600,
+#    )
+#}
 
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
