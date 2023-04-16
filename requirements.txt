@@ -13,3 +13,6 @@ requests
 sqlparse
 tzdata
 urllib3
+whitenoise
+gunicorn
+psycopg2
