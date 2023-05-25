@@ -4,6 +4,7 @@ charset-normalizer
 dj-database-url
 django
 django-crispy-forms
+django-imagekit
 django-environ
 django-js-asset
 djangorestframework
@@ -16,3 +17,4 @@ urllib3
 whitenoise
 gunicorn
 psycopg2
+Pillow
